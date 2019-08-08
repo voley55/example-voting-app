@@ -7,6 +7,9 @@ pipeline{
 
     stages{
 	stage("test"){
+		when{
+			changeset "**/result/**"
+            	}
 		steps{
                 	echo 'Building result app'
                 	dir('result'){
@@ -15,12 +18,15 @@ pipeline{
 		}		 
 	}
         stage("build"){
-            steps{
+		when{
+			changeset "**/result/**"
+            	}
+            	steps{
 	    		echo 'Building result app'
                         dir('result'){
                                  sh 'npm install && npm list'
                         }
-	    }  
+	    	}  
 	}
     }
     
