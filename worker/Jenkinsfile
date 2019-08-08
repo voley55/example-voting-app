@@ -7,6 +7,9 @@ pipeline{
 
     stages{
 	stage("build"){
+		when{
+			changeset "**/worker/**"
+		}
 		steps{
                 	echo 'Compiling worker app'
                 	dir('worker'){
@@ -15,20 +18,27 @@ pipeline{
 		}		 
 	}
         stage("test"){
-            steps{
+		when{
+			changeset "**/worker/**"
+		}
+            	steps{
 	    		echo 'Testing worker app'
                         dir('worker'){
                                  sh 'mvn clean test'
                         }
-	    }  
+	    	}  
 	}
         stage("package"){
-            steps{
+		when{
+			changeset "**/worker/**"
+		}
+            	steps{
 	    		echo 'Packaging worker app'
                         dir('worker'){
                                  sh 'mvn package -DskipTests'
+				 archiveArtifacts artifacts: '**/target/*.jar'
                         }
-	    } 
+	    	} 
 	}
     }
     
